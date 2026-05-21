@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Plus, Square, Circle, Minus, Trash2, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
-import { useBoardStore } from '../boardStore';
+import { useBoardStore, Element } from '../boardStore';
 import { createStickyNote, createRectangle, createCircle, createLine } from '../elementUtils';
 
 interface ToolbarProps {
@@ -14,7 +14,7 @@ export function Toolbar({ onResetZoom }: ToolbarProps) {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Helper to spawn elements at canvas center instead of world (0,0)
-  const spawnAtCenter = (creator: (pos: { x: number; y: number }) => any) => {
+  const spawnAtCenter = (creator: (pos: { x: number; y: number }) => Element) => {
     // Calculate center of visible canvas (convert screen center to world coordinates)
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;

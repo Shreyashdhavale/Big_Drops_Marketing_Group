@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { ActivityFeed } from './ActivityFeed';
 
 export function ActivityToggle() {
@@ -30,7 +30,7 @@ export function ActivityToggle() {
         className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors fixed bottom-4 right-4 z-50 bg-white shadow-lg"
         title="View activity logs"
       >
-        <MessageCircle className="w-5 h-5 text-slate-700" />
+        <Bell className="w-5 h-5 text-slate-700" />
       </button>
 
       {/* Modal overlay on mobile/tablet */}

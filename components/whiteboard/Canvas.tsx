@@ -49,6 +49,8 @@ export function Canvas() {
     };
 
     loadBoard();
+    // Intentionally not including deps to load once on ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   // Auto-save when board changes
@@ -61,11 +63,15 @@ export function Canvas() {
     }, 1000);
 
     return () => clearTimeout(debounceTimer);
+    // Intentionally not including all deps to avoid constant resaves
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeElements, canvasTransform, isReady]);
 
   // Sync Zustand transform with local hook transform
   useEffect(() => {
     setCanvasTransform(transform);
+    // Intentionally minimal deps for transform sync
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transform]);
 
   // Setup event listeners
@@ -75,17 +81,17 @@ export function Canvas() {
 
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
 
-    container.addEventListener('wheel', handleWheel as any, { passive: false });
-    container.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    container.addEventListener('wheel', handleWheel as EventListener, { passive: false });
+    container.addEventListener('mousedown', handleMouseDown as EventListener);
+    window.addEventListener('mousemove', handleMouseMove as EventListener);
+    window.addEventListener('mouseup', handleMouseUp as EventListener);
     container.addEventListener('contextmenu', handleContextMenu);
 
     return () => {
-      container.removeEventListener('wheel', handleWheel as any);
-      container.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      container.removeEventListener('wheel', handleWheel as EventListener);
+      container.removeEventListener('mousedown', handleMouseDown as EventListener);
+      window.removeEventListener('mousemove', handleMouseMove as EventListener);
+      window.removeEventListener('mouseup', handleMouseUp as EventListener);
       container.removeEventListener('contextmenu', handleContextMenu);
     };
   }, [handleWheel, handleMouseDown, handleMouseMove, handleMouseUp]);
@@ -172,7 +178,7 @@ export function Canvas() {
           onMouseMove={handleMouseMoveCanvas}
           onMouseUp={handleMouseUpCanvas}
           onMouseLeave={handleMouseUpCanvas}
-          onTouchMove={handleTouchMove as any}
+          onTouchMove={handleTouchMove as React.TouchEventHandler<SVGSVGElement>}
           onTouchEnd={handleTouchEnd}
         >
           <defs>
@@ -207,10 +213,10 @@ export function Canvas() {
             {elements.map((element) => (
               <g key={element.id} onMouseDown={(e) => handleElementMouseDown(e, element.id)}>
                 {element.type === 'sticky-note' && (
-                  <StickyNote element={element as any} isSelected={selectedElementId === element.id} />
+                  <StickyNote element={element as React.ComponentProps<typeof StickyNote>['element']} isSelected={selectedElementId === element.id} />
                 )}
                 {(element.type === 'rectangle' || element.type === 'circle' || element.type === 'line') && (
-                  <ShapeElement element={element as any} isSelected={selectedElementId === element.id} />
+                  <ShapeElement element={element as React.ComponentProps<typeof ShapeElement>['element']} isSelected={selectedElementId === element.id} />
                 )}
               </g>
             ))}
@@ -223,7 +229,7 @@ export function Canvas() {
         </div>
         
         {/* Activity Feed - visible only on desktop */}
-        <div className="hidden md:block absolute top-20 md:top-24 right-4 md:right-8 pointer-events-auto">
+        <div className="absolute top-20 md:top-24 right-4 md:right-8 pointer-events-auto hidden md:block">
           <ActivityFeed />
         </div>
 

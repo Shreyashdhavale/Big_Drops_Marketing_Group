@@ -1,8 +1,15 @@
 'use client';
 
+import { Element, CanvasTransform } from './boardStore';
+
 const DB_NAME = 'WhiteboardDB';
 const STORE_NAME = 'boards';
 const BOARD_KEY = 'current-board';
+
+interface BoardData {
+  elements: Element[];
+  transform: CanvasTransform;
+}
 
 export class PersistenceManager {
   private db: IDBDatabase | null = null;
@@ -26,10 +33,7 @@ export class PersistenceManager {
     });
   }
 
-  async saveBoard(data: {
-    elements: any[];
-    transform: any;
-  }): Promise<void> {
+  async saveBoard(data: BoardData): Promise<void> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {
@@ -42,7 +46,7 @@ export class PersistenceManager {
     });
   }
 
-  async loadBoard(): Promise<{ elements: any[]; transform: any } | null> {
+  async loadBoard(): Promise<BoardData | null> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {

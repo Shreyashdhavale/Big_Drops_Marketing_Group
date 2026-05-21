@@ -2,6 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { persistenceManager } from './persistenceStore';
+import { CanvasTransform, Element } from './boardStore';
+
+interface BoardData {
+  elements: Element[];
+  transform: CanvasTransform;
+}
 
 export function usePersistence() {
   const [isReady, setIsReady] = useState(false);
@@ -10,7 +16,7 @@ export function usePersistence() {
     persistenceManager.init().then(() => setIsReady(true));
   }, []);
 
-  const save = async (data: any) => {
+  const save = async (data: BoardData) => {
     if (!isReady) return;
     try {
       await persistenceManager.saveBoard(data);

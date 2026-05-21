@@ -96,7 +96,7 @@ export const useBoardStore = create<BoardState>()(
             ...element,
             ...updates,
             updatedAt: Date.now(),
-          });
+          } as Element);
           return { elements: newElements };
         }),
 

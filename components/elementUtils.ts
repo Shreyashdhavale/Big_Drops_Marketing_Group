@@ -1,6 +1,6 @@
 'use client';
 
-import { Element, ElementType, Position, Size, StickyNote, Shape } from './boardStore';
+import { Element, Position, StickyNote, Shape } from './boardStore';
 
 export function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;

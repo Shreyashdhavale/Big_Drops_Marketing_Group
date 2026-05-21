@@ -10,26 +10,24 @@ interface User {
 }
 
 export function UserPresence() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([
+    { id: '1', name: 'Alice', color: '#ff6b6b', cursor: { x: 100, y: 100 } },
+    { id: '2', name: 'Bob', color: '#4ecdc4', cursor: { x: 300, y: 200 } },
+  ]);
 
   useEffect(() => {
-    const fakeUsers: User[] = [
-      { id: '1', name: 'Alice', color: '#ff6b6b', cursor: { x: 100, y: 100 } },
-      { id: '2', name: 'Bob', color: '#4ecdc4', cursor: { x: 300, y: 200 } },
-    ];
-
     // Simulate cursor movement
     const interval = setInterval(() => {
-      setUsers(fakeUsers.map((user) => ({
-        ...user,
-        cursor: {
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-        },
-      })));
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => ({
+          ...user,
+          cursor: {
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+          },
+        }))
+      );
     }, 2000);
-
-    setUsers(fakeUsers);
 
     return () => clearInterval(interval);
   }, []);
